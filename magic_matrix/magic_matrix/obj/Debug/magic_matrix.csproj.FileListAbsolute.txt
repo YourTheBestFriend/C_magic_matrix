@@ -1,0 +1,7 @@
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\bin\Debug\magic_matrix.exe.config
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\bin\Debug\magic_matrix.exe
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\bin\Debug\magic_matrix.pdb
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\obj\Debug\magic_matrix.csproj.AssemblyReference.cache
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\obj\Debug\magic_matrix.csproj.CoreCompileInputs.cache
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\obj\Debug\magic_matrix.exe
+C:\Users\Xhref\Desktop\C#\magic_matrix\magic_matrix\obj\Debug\magic_matrix.pdb
