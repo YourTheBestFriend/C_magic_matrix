@@ -169,51 +169,115 @@ namespace magic_matrix
             // уточнить про причем вторая половина квадрата заполняется аналогично первой
 
             // А теперь манипуляции
-            int[] help_arr = new int[array.GetLength(0)]; // Вспомогательный 
-            //int[] help_arr2 = new int[array.GetLength(0)]; // Вспомогательный 2
-
-
+            //___________________________________________________A
             // Зеркально меняю столбец (диагональ не трогаю)
-            for (int i = 0; i < array.GetLength(0); i++)
+            for (int i = 1; i < array.GetLength(0); i++)
             {
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    if (i == j) continue;
-                    if (j == 0) help_arr[i] = array[i, j];
-                }
+                int j = array[i, 0];
+                array[i, 0] = array[i, array.GetLength(0)-1];
+                array[i, array.GetLength(0) - 1] = j;
             }
-
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    if (i == j) continue;
-                    if (j == 0) help_arr[i] = array[i, j];
-                }
-            }
-
             // Зеркально меняю строку (диагональ не трогаю)
+            for (int i = 1; i < array.GetLength(0); i++)
+            {
+                int j = array[0, i];
+                array[0, i] = array[array.GetLength(0) - 1, i];
+                array[array.GetLength(0) - 1, i] = j;
+            }
+
+            //___________________________________________________B
+            // two
+            int vtoroy_sredn_in_strok = array[1,0]; // Вторая строка первый элемент
+            int index_vtoroy_sredn_in_strok = 0;
+
+            int vtoroy_sredn_in_stolbec = array[0, 1]; // Второй столбец первый элемент
+            int index_vtoroy_sredn_in_stolbec = 1;
+
+            // last
+            int posledn_sredn_in_strok = array[array.GetLength(0)-1, 0]; 
+            int index_posledn_sredn_in_strok = 0;
+
+            int posledn_sredn_in_stolbec = array[0, array.GetLength(1)-1]; 
+            int index_posledn_sredn_in_stolbec = array.GetLength(1)-1;
+
+
+            // Нахожу средние 
             for (int i = 0; i < array.GetLength(0); i++)
             {
                 for (int j = 0; j < array.GetLength(1); j++)
                 {
-                    if (i == j) continue;
-                    if (i == 0) help_arr[i] = array[i, j];
+                    // По строке
+                    {
+                        // Вторая строка 
+                        if (i == 1)
+                        {
+                            if (vtoroy_sredn_in_strok < array[i, j])
+                            {
+                                vtoroy_sredn_in_strok = array[i, j];
+                                index_vtoroy_sredn_in_strok = i;
+                            }
+                        }
+                        // Последняя строка
+                        if (i == array.GetLength(0) - 1)
+                        {
+                            if (posledn_sredn_in_strok < array[i, j])
+                            {
+                                posledn_sredn_in_strok = array[i, j];
+                                index_posledn_sredn_in_strok = i;
+                            }
+                        }
+                    }
+                    // По столбцу 
+                    {
+                        // Второй столбец
+                        if (j == 1)
+                        {
+                            if (vtoroy_sredn_in_stolbec < array[i, j])
+                            {
+                                vtoroy_sredn_in_stolbec = array[i, j];
+                                index_vtoroy_sredn_in_stolbec = j;
+                            }
+                        }
+                        // Последний столбец
+                        if (j == array.GetLength(1) - 1)
+                        {
+                            if (posledn_sredn_in_stolbec < array[i, j])
+                            {
+                                posledn_sredn_in_stolbec = array[i, j];
+                                index_posledn_sredn_in_stolbec = j;
+                            }
+                        }
+                    }
                 }
             }
+            // Меняю 
+            // row
+            array[array.GetLength(0)-1, index_posledn_sredn_in_strok] = posledn_sredn_in_strok;
+            array[2, index_vtoroy_sredn_in_strok] = vtoroy_sredn_in_strok;
+            // col
+            array[index_posledn_sredn_in_stolbec, array.GetLength(1)-1] = vtoroy_sredn_in_stolbec;
+            array[2, index_vtoroy_sredn_in_stolbec] = posledn_sredn_in_stolbec;
 
+
+            Console.WriteLine($" ======== {vtoroy_sredn_in_stolbec} ================ {posledn_sredn_in_stolbec}");
+            //___________________________________________________C
+
+
+            printArray(array, array.GetLength(0), array.GetLength(1));
             return array;
         }
 
         static void Main(string[] args)
         {
-            int[,] array1 = new int[8, 8];
+            int[,] array2 = new int[8, 8];
+            int[,] array3 = new int[8, 8];
 
-            array1 = chetn_n_kratno_4(array1);
+            array2 = chetn_n_kratno_4(array2);
             // output
             Console.WriteLine("Your array: ");
-            printArray(array1, array1.GetLength(0), array1.GetLength(1));
+            printArray(array2, array2.GetLength(0), array2.GetLength(1));
 
+            array3 = chetn_n_ne_kratno_4(array3);
         }
     }
 }
