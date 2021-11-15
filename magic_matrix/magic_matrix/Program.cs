@@ -9,8 +9,47 @@ namespace magic_matrix
 {
     class Program
     {
+        // Returns true if mat[][] is magic
+        // square, else returns false.
+        static bool isMagicSquare(int[,] mat)
+        {
 
-        static void printArray(int[,] array, int row, int col) 
+            // sumd1 and sumd2 are the sum of the two diagonals
+            int sumd1 = 0, sumd2 = 0;
+
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+                // (i, i) is the diagonal from top-left -> bottom-right
+                // (i, N - i - 1) is the diagonal from top-right -> bottom-left
+                sumd1 = sumd1 + mat[i, i];
+                sumd2 = sumd2 + mat[i, mat.GetLength(0) - 1 - i];
+            }
+            // if the two diagonal sums are unequal then it is not a magic square
+            if (sumd1 != sumd2)
+                return false;
+
+            // For sums of Rows
+            for (int i = 0; i < mat.GetLength(0); i++)
+            {
+
+                int rowSum = 0, colSum = 0;
+                for (int j = 0; j < mat.GetLength(0); j++)
+                {
+                    rowSum += mat[i, j];
+                    colSum += mat[j, i];
+                }
+                if (rowSum != colSum || colSum != sumd1)
+                    return false;
+            }
+
+            return true;
+        }
+
+
+
+
+
+        static void printArray(int[,] array, int row, int col)
         {
             for (int i = 0; i < row; i++)
             {
@@ -70,9 +109,9 @@ namespace magic_matrix
                 {
                     flag_polov--;
                 }
-               
+
                 k = 1;
-                k_reverse = array.GetLength(0); 
+                k_reverse = array.GetLength(0);
             }
 
             // используею по новой (все зануляю)
@@ -133,7 +172,7 @@ namespace magic_matrix
                                 ar2[i, j] = k_reverse-- * k;
                             }
                         }
-                    } 
+                    }
                 }
                 flag_polov--;
                 k = array.GetLength(0);
@@ -165,8 +204,29 @@ namespace magic_matrix
         {
             // Воспользуюсь своей замечательной функицей из 2 пункта
             array = chetn_n_kratno_4(array);
+            printArray(array, array.GetLength(0), array.GetLength(1));
+            Console.WriteLine(" =11===============================");
+            
+            // Выделяю половину в другой массив
+            int [,] help_arr = new int[array.GetLength(0), array.GetLength(1) / 2];
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1) / 2; j++)
+                {
+                    help_arr[i, j] = array[i, j];
+                }
+            }
+            for (int i = (array.GetLength(0) / 2) - 1;  i < array.GetLength(0);  i++)
+            {
+                for (int j = array.GetLength(1)-1; j < array.GetLength(1) / 2; j++)
+                {
+                    array[i, j] = help_arr[i, j];
+                }
+            }
+            Console.WriteLine(" =11===============================");
+            printArray(array, array.GetLength(0), array.GetLength(1));
+            Console.WriteLine(" =11===============================");
 
-            // уточнить про причем вторая половина квадрата заполняется аналогично первой
 
             // А теперь манипуляции
             //___________________________________________________A
@@ -174,7 +234,7 @@ namespace magic_matrix
             for (int i = 1; i < array.GetLength(0); i++)
             {
                 int j = array[i, 0];
-                array[i, 0] = array[i, array.GetLength(0)-1];
+                array[i, 0] = array[i, array.GetLength(0) - 1];
                 array[i, array.GetLength(0) - 1] = j;
             }
             // Зеркально меняю строку (диагональ не трогаю)
@@ -184,22 +244,23 @@ namespace magic_matrix
                 array[0, i] = array[array.GetLength(0) - 1, i];
                 array[array.GetLength(0) - 1, i] = j;
             }
+            //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" ================================");
 
             //___________________________________________________B
             // two
-            int vtoroy_sredn_in_strok = array[1,0]; // Вторая строка первый элемент
+            int vtoroy_sredn_in_strok = array[1, 0]; // Вторая строка первый элемент
             int index_vtoroy_sredn_in_strok = 0;
 
             int vtoroy_sredn_in_stolbec = array[0, 1]; // Второй столбец первый элемент
             int index_vtoroy_sredn_in_stolbec = 1;
 
             // last
-            int posledn_sredn_in_strok = array[array.GetLength(0)-1, 0]; 
+            int posledn_sredn_in_strok = array[array.GetLength(0) - 1, 0];
             int index_posledn_sredn_in_strok = 0;
 
-            int posledn_sredn_in_stolbec = array[0, array.GetLength(1)-1]; 
-            int index_posledn_sredn_in_stolbec = array.GetLength(1)-1;
-
+            int posledn_sredn_in_stolbec = array[0, array.GetLength(1) - 1];
+            int index_posledn_sredn_in_stolbec = 0;
 
             // Нахожу средние 
             for (int i = 0; i < array.GetLength(0); i++)
@@ -235,7 +296,7 @@ namespace magic_matrix
                             if (vtoroy_sredn_in_stolbec < array[i, j])
                             {
                                 vtoroy_sredn_in_stolbec = array[i, j];
-                                index_vtoroy_sredn_in_stolbec = j;
+                                index_vtoroy_sredn_in_stolbec = i;
                             }
                         }
                         // Последний столбец
@@ -244,40 +305,65 @@ namespace magic_matrix
                             if (posledn_sredn_in_stolbec < array[i, j])
                             {
                                 posledn_sredn_in_stolbec = array[i, j];
-                                index_posledn_sredn_in_stolbec = j;
+                                index_posledn_sredn_in_stolbec = i;
                             }
                         }
                     }
                 }
             }
-            // Меняю 
+            // switch 
+
+            //Console.WriteLine(" ================================");
+            // Для проверки что меняю
+            //Console.WriteLine($" ======== {vtoroy_sredn_in_strok} ================ {posledn_sredn_in_strok}");
+            //Console.WriteLine($" ======== {vtoroy_sredn_in_stolbec} ================ {posledn_sredn_in_stolbec}");
+            
             // row
-            array[array.GetLength(0)-1, index_posledn_sredn_in_strok] = posledn_sredn_in_strok;
-            array[2, index_vtoroy_sredn_in_strok] = vtoroy_sredn_in_strok;
+            array[array.GetLength(0)-1, index_posledn_sredn_in_strok] = vtoroy_sredn_in_strok;
+            array[1, index_vtoroy_sredn_in_strok] = posledn_sredn_in_strok;
+            
             // col
             array[index_posledn_sredn_in_stolbec, array.GetLength(1)-1] = vtoroy_sredn_in_stolbec;
-            array[2, index_vtoroy_sredn_in_stolbec] = posledn_sredn_in_stolbec;
+            array[index_vtoroy_sredn_in_stolbec, 1] = posledn_sredn_in_stolbec;
 
+            //Console.WriteLine(" ================================");
+            //printArray(array, array.GetLength(0), array.GetLength(1));
 
-            Console.WriteLine($" ======== {vtoroy_sredn_in_stolbec} ================ {posledn_sredn_in_stolbec}");
             //___________________________________________________C
+            int sredn = (array.GetLength(0) / 2) - 1;
 
+            // stolbec
+            int stolbec_k_reverse = array[0, sredn];
+            array[0, sredn] = array[array.GetLength(0) - 1, sredn];
+            array[array.GetLength(0) - 1, sredn] = stolbec_k_reverse;
 
-            printArray(array, array.GetLength(0), array.GetLength(1));
+            // stroka
+            int stroka_k_reverse = array[sredn, 0];
+            array[sredn, 0] = array[sredn, array.GetLength(0) - 1];
+            array[sredn, array.GetLength(0) - 1] = stroka_k_reverse;
+
+            //Console.WriteLine(" ================================");
+            //printArray(array, array.GetLength(0), array.GetLength(1));
+
             return array;
         }
 
         static void Main(string[] args)
         {
+            int[,] array1 = new int[7, 7];
             int[,] array2 = new int[8, 8];
-            int[,] array3 = new int[8, 8];
+            int[,] array3 = new int[6, 6];
 
+            // output 2
+            Console.WriteLine("Your array **2**: ");
             array2 = chetn_n_kratno_4(array2);
-            // output
-            Console.WriteLine("Your array: ");
             printArray(array2, array2.GetLength(0), array2.GetLength(1));
-
+            Console.WriteLine(" ============= " + isMagicSquare(array2) + " =============");
+            // output 3
+            Console.WriteLine("Your array ***3***: ");
             array3 = chetn_n_ne_kratno_4(array3);
+            printArray(array3, array3.GetLength(0), array3.GetLength(1));
+            Console.WriteLine(" ============= " + isMagicSquare(array3) + " =============");
         }
     }
 }
