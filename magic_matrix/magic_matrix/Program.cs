@@ -48,7 +48,6 @@ namespace magic_matrix
 
 
 
-
         static void printArray(int[,] array, int row, int col)
         {
             for (int i = 0; i < row; i++)
@@ -206,131 +205,160 @@ namespace magic_matrix
             array = chetn_n_kratno_4(array);
             printArray(array, array.GetLength(0), array.GetLength(1));
             Console.WriteLine(" =11===============================");
-            
-            // Выделяю половину в другой массив
-            int [,] help_arr = new int[array.GetLength(0), array.GetLength(1) / 2];
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                for (int j = 0; j < array.GetLength(1) / 2; j++)
-                {
-                    help_arr[i, j] = array[i, j];
-                }
-            }
-            for (int i = (array.GetLength(0) / 2) - 1;  i < array.GetLength(0);  i++)
-            {
-                for (int j = array.GetLength(1)-1; j < array.GetLength(1) / 2; j++)
-                {
-                    array[i, j] = help_arr[i, j];
-                }
-            }
-            Console.WriteLine(" =11===============================");
-            printArray(array, array.GetLength(0), array.GetLength(1));
-            Console.WriteLine(" =11===============================");
+
+            //// Выделяю половину в другой массив
+            //int [,] help_arr = new int[array.GetLength(0), array.GetLength(1) / 2];
+            //for (int i = 0; i < array.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < array.GetLength(1) / 2; j++)
+            //    {
+            //        help_arr[i, j] = array[i, j];
+            //    }
+            //}
+            //for (int i = (array.GetLength(0) / 2) - 1;  i < array.GetLength(0);  i++)
+            //{
+            //    for (int j = array.GetLength(1) - 1; j < array.GetLength(1); j++)
+            //    {
+            //        array[i, j] = help_arr[i, j / 2];
+            //    }
+            //}
+            //Console.WriteLine(" =11===============================");
+            //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" =11===============================");
 
 
             // А теперь манипуляции
             //___________________________________________________A
             // Зеркально меняю столбец (диагональ не трогаю)
-            for (int i = 1; i < array.GetLength(0); i++)
+            int i_back = array.GetLength(0) - 2;
+            for (int i = 1; i < array.GetLength(0) / 2; i++, i_back--) // i = 1 - либо внизу проверка чтобы не попало на диагональ i != 0
             {
                 int j = array[i, 0];
-                array[i, 0] = array[i, array.GetLength(0) - 1];
-                array[i, array.GetLength(0) - 1] = j;
+                array[i, 0] = array[i_back, 0];
+                array[i_back, 0] = j;
             }
+            // Это было но не правильно
+            //for (int i = 1; i < array.GetLength(0); i++)
+            //{
+            //    int j = array[i, 0];
+            //    array[i, 0] = array[i, array.GetLength(0) - 1];
+            //    array[i, array.GetLength(0) - 1] = j;
+            //}
             // Зеркально меняю строку (диагональ не трогаю)
-            for (int i = 1; i < array.GetLength(0); i++)
+
+            int i_back2 = array.GetLength(0) - 2;
+            for (int i = 1; i < array.GetLength(0) / 2; i++, i_back2--)
             {
                 int j = array[0, i];
-                array[0, i] = array[array.GetLength(0) - 1, i];
-                array[array.GetLength(0) - 1, i] = j;
+                array[0, i] = array[0, i_back2];
+                array[0, i_back2] = j;
             }
             //printArray(array, array.GetLength(0), array.GetLength(1));
             //Console.WriteLine(" ================================");
 
             //___________________________________________________B
             // two
-            int vtoroy_sredn_in_strok = array[1, 0]; // Вторая строка первый элемент
-            int index_vtoroy_sredn_in_strok = 0;
 
-            int vtoroy_sredn_in_stolbec = array[0, 1]; // Второй столбец первый элемент
-            int index_vtoroy_sredn_in_stolbec = 1;
+            // stroka 
+            // т.к это всегда будет четным то
+            int index_SEREDINA_two_last_stroki = array.GetLength(0) / 2;
 
-            // last
-            int posledn_sredn_in_strok = array[array.GetLength(0) - 1, 0];
-            int index_posledn_sredn_in_strok = 0;
+            // 1 - это вторая строка (счет то с нуля)
+            int reverse_j = array[1, index_SEREDINA_two_last_stroki];
+            array[1, index_SEREDINA_two_last_stroki] = array[array.GetLength(0)-1, index_SEREDINA_two_last_stroki];
+            array[array.GetLength(0) - 1, index_SEREDINA_two_last_stroki] = reverse_j;
 
-            int posledn_sredn_in_stolbec = array[0, array.GetLength(1) - 1];
-            int index_posledn_sredn_in_stolbec = 0;
-
-            // Нахожу средние 
-            for (int i = 0; i < array.GetLength(0); i++)
-            {
-                for (int j = 0; j < array.GetLength(1); j++)
-                {
-                    // По строке
-                    {
-                        // Вторая строка 
-                        if (i == 1)
-                        {
-                            if (vtoroy_sredn_in_strok < array[i, j])
-                            {
-                                vtoroy_sredn_in_strok = array[i, j];
-                                index_vtoroy_sredn_in_strok = i;
-                            }
-                        }
-                        // Последняя строка
-                        if (i == array.GetLength(0) - 1)
-                        {
-                            if (posledn_sredn_in_strok < array[i, j])
-                            {
-                                posledn_sredn_in_strok = array[i, j];
-                                index_posledn_sredn_in_strok = i;
-                            }
-                        }
-                    }
-                    // По столбцу 
-                    {
-                        // Второй столбец
-                        if (j == 1)
-                        {
-                            if (vtoroy_sredn_in_stolbec < array[i, j])
-                            {
-                                vtoroy_sredn_in_stolbec = array[i, j];
-                                index_vtoroy_sredn_in_stolbec = i;
-                            }
-                        }
-                        // Последний столбец
-                        if (j == array.GetLength(1) - 1)
-                        {
-                            if (posledn_sredn_in_stolbec < array[i, j])
-                            {
-                                posledn_sredn_in_stolbec = array[i, j];
-                                index_posledn_sredn_in_stolbec = i;
-                            }
-                        }
-                    }
-                }
-            }
-            // switch 
-
-            //Console.WriteLine(" ================================");
-            // Для проверки что меняю
-            //Console.WriteLine($" ======== {vtoroy_sredn_in_strok} ================ {posledn_sredn_in_strok}");
-            //Console.WriteLine($" ======== {vtoroy_sredn_in_stolbec} ================ {posledn_sredn_in_stolbec}");
-            
-            // row
-            array[array.GetLength(0)-1, index_posledn_sredn_in_strok] = vtoroy_sredn_in_strok;
-            array[1, index_vtoroy_sredn_in_strok] = posledn_sredn_in_strok;
-            
-            // col
-            array[index_posledn_sredn_in_stolbec, array.GetLength(1)-1] = vtoroy_sredn_in_stolbec;
-            array[index_vtoroy_sredn_in_stolbec, 1] = posledn_sredn_in_stolbec;
+            // stolbec
+            reverse_j = array[index_SEREDINA_two_last_stroki, 1];
+            array[index_SEREDINA_two_last_stroki, 1] = array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1];
+            array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1] = reverse_j;
 
             //Console.WriteLine(" ================================");
             //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" ================================");
+
+            // тут я слишком хотел переиграть код но все то что я писал оказалось в пустую но я все равно оставлю это сдесь D_D
+            //int vtoroy_sredn_in_strok = array[1, 0]; // Вторая строка первый элемент
+            //int index_vtoroy_sredn_in_strok = 0;
+
+            //int vtoroy_sredn_in_stolbec = array[0, 1]; // Второй столбец первый элемент
+            //int index_vtoroy_sredn_in_stolbec = 1;
+
+            //// last
+            //int posledn_sredn_in_strok = array[array.GetLength(0) - 1, 0];
+            //int index_posledn_sredn_in_strok = 0;
+
+            //int posledn_sredn_in_stolbec = array[0, array.GetLength(1) - 1];
+            //int index_posledn_sredn_in_stolbec = 0;
+
+            //// Нахожу средние 
+            //for (int i = 0; i < array.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < array.GetLength(1); j++)
+            //    {
+            //        // По строке
+            //        {
+            //            // Вторая строка 
+            //            if (i == 1)
+            //            {
+            //                if (vtoroy_sredn_in_strok < array[i, j])
+            //                {
+            //                    vtoroy_sredn_in_strok = array[i, j];
+            //                    index_vtoroy_sredn_in_strok = i;
+            //                }
+            //            }
+            //            // Последняя строка
+            //            if (i == array.GetLength(0) - 1)
+            //            {
+            //                if (posledn_sredn_in_strok < array[i, j])
+            //                {
+            //                    posledn_sredn_in_strok = array[i, j];
+            //                    index_posledn_sredn_in_strok = i;
+            //                }
+            //            }
+            //        }
+            //        // По столбцу 
+            //        {
+            //            // Второй столбец
+            //            if (j == 1)
+            //            {
+            //                if (vtoroy_sredn_in_stolbec < array[i, j])
+            //                {
+            //                    vtoroy_sredn_in_stolbec = array[i, j];
+            //                    index_vtoroy_sredn_in_stolbec = i;
+            //                }
+            //            }
+            //            // Последний столбец
+            //            if (j == array.GetLength(1) - 1)
+            //            {
+            //                if (posledn_sredn_in_stolbec < array[i, j])
+            //                {
+            //                    posledn_sredn_in_stolbec = array[i, j];
+            //                    index_posledn_sredn_in_stolbec = i;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //// switch 
+            ////Console.WriteLine(" ================================");
+            //// Для проверки что меняю
+            ////Console.WriteLine($" ======== {vtoroy_sredn_in_strok} ================ {posledn_sredn_in_strok}");
+            ////Console.WriteLine($" ======== {vtoroy_sredn_in_stolbec} ================ {posledn_sredn_in_stolbec}");
+
+            //// row
+            //array[array.GetLength(0)-1, index_posledn_sredn_in_strok] = vtoroy_sredn_in_strok;
+            //array[1, index_vtoroy_sredn_in_strok] = posledn_sredn_in_strok;
+
+            //// col
+            //array[index_posledn_sredn_in_stolbec, array.GetLength(1)-1] = vtoroy_sredn_in_stolbec;
+            //array[index_vtoroy_sredn_in_stolbec, 1] = posledn_sredn_in_stolbec;
+
+            ////Console.WriteLine(" ================================");
+            ////printArray(array, array.GetLength(0), array.GetLength(1));
 
             //___________________________________________________C
-            int sredn = (array.GetLength(0) / 2) - 1;
+            int sredn = array.GetLength(0) / 2;
 
             // stolbec
             int stolbec_k_reverse = array[0, sredn];
@@ -351,8 +379,8 @@ namespace magic_matrix
         static void Main(string[] args)
         {
             int[,] array1 = new int[7, 7];
-            int[,] array2 = new int[8, 8];
-            int[,] array3 = new int[6, 6];
+            int[,] array2 = new int[8, 8]; // четно и кратно 4
+            int[,] array3 = new int[6, 6]; // четно но некратно 4
 
             // output 2
             Console.WriteLine("Your array **2**: ");
@@ -363,7 +391,7 @@ namespace magic_matrix
             Console.WriteLine("Your array ***3***: ");
             array3 = chetn_n_ne_kratno_4(array3);
             printArray(array3, array3.GetLength(0), array3.GetLength(1));
-            Console.WriteLine(" ============= " + isMagicSquare(array3) + " =============");
+            Console.WriteLine(" ============= " + isMagicSquare(array3) + " =============");   
         }
     }
 }
