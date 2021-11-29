@@ -45,9 +45,6 @@ namespace magic_matrix
             return true;
         }
 
-
-
-
         static void printArray(int[,] array, int row, int col)
         {
             for (int i = 0; i < row; i++)
@@ -58,6 +55,39 @@ namespace magic_matrix
                 }
                 Console.WriteLine();
             }
+        }
+
+        public static int[,] odd(int n)
+        {
+            int[,] arr = new int[n, n];
+            int i = n / 2;
+            int j = n - 1;
+            for (int num = 1; num <= n * n;)
+            {
+                if (i == -1 && j == n)
+                {
+                    j = n - 2;
+                    i = 0;
+                }
+                else
+                {
+                    if (j == n)
+                        j = 0;
+                    if (i < 0)
+                        i = n - 1;
+                }
+                if (arr[i, j] != 0)
+                {
+                    j -= 2;
+                    i++;
+                    continue;
+                }
+                else
+                    arr[i, j] = num++;
+                j++;
+                i--;
+            }
+            return arr;
         }
 
         static int[,] chetn_n_kratno_4(int[,] array)
@@ -178,14 +208,16 @@ namespace magic_matrix
                 k_reverse = array.GetLength(0) - 1;
                 num_multiplication_N = 1;
             }
-            Console.WriteLine("FUNCTION chetn_n_kratno_4");
+            //Console.WriteLine("FUNCTION chetn_n_kratno_4");
 
             //___________________
             // check 2 array
+            //Console.WriteLine("============");
             //Console.WriteLine("array 1:");
             //printArray(ar1, ar1.GetLength(0), ar1.GetLength(1));
             //Console.WriteLine("array 2:");
             //printArray(ar2, ar2.GetLength(0), ar2.GetLength(1));
+            //Console.WriteLine("============");
             //___________________
 
             // create
@@ -201,11 +233,89 @@ namespace magic_matrix
 
         static int[,] chetn_n_ne_kratno_4(int[,] array)
         {
+            // Секция получения квадрата
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            //int[,] ar1 = new int[array.GetLength(0), array.GetLength(1)];
+            //int[,] ar2 = new int[array.GetLength(0), array.GetLength(1)];
+
+            //int k = 1;
+
+            //// Заполняю 1 квадрат
+            //for (int i = 0; i < array.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < array.GetLength(1); j++)
+            //    {
+            //        if (i % 2 == 0)
+            //        {
+            //            ar1[i, j] = k;
+            //            k++;
+            //        }
+            //        else
+            //        {
+            //            k--;
+            //            ar1[i, j] = k;
+            //        }
+            //    }
+            //}
+            //// Заполняю 2 квадрат
+            //for (int j = 0; j < array.GetLength(0) / 2 - 1; j++)
+            //{
+            //    for (int i = 0; i < array.GetLength(1) / 2 - 1; i++)
+            //    {
+            //        if (j % 2 == 0)
+            //        {
+            //            ar2[i, j] = k;
+            //            k++;
+            //        }
+            //        else
+            //        {
+            //            k--;
+            //            ar2[i, j] = k;
+            //        }
+            //    }
+            //}
+
+            //////___________________
+            //// check 2 array
+            //Console.WriteLine("array 1:");
+            //printArray(ar1, ar1.GetLength(0), ar1.GetLength(1));
+            //Console.WriteLine("array 2:");
+            //printArray(ar2, ar2.GetLength(0), ar2.GetLength(1));
+            //Console.WriteLine("============");
+            //////___________________
+
+            ////// create
+            //for (int i = 0; i < array.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < array.GetLength(1); j++)
+            //    {
+            //        array[i, j] = ar1[i, j] + ar2[i, j];
+            //    }
+            //}
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             // Воспользуюсь своей замечательной функицей из 2 пункта
             array = chetn_n_kratno_4(array);
-            printArray(array, array.GetLength(0), array.GetLength(1));
-            Console.WriteLine(" =11===============================");
+            // CHECK
+            //Console.WriteLine(" =____===============================");
+            //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" =____===============================");
 
+            ///////////////////////////////////////////////////////////////////////////// Тут фигню написал
+            //// А теперь заполняю половину квадрата так же
+            //for (int i = 0, index_last_i = array.GetLength(0) / 2; i < array.GetLength(0) / 2; i++, index_last_i++)
+            //{
+            //    for (int j = 0, index_last_j = array.GetLength(0) / 2; j < array.GetLength(0) / 2; j++, index_last_j++)
+            //    {
+            //        array[index_last_i, index_last_j] = array[i, j];
+            //    }
+            //}
+            ///////////////////////////////////////////////////////////////////////////// Тут фигню написал
+
+
+            //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" =11===============================");
             //// Выделяю половину в другой массив
             //int [,] help_arr = new int[array.GetLength(0), array.GetLength(1) / 2];
             //for (int i = 0; i < array.GetLength(0); i++)
@@ -222,6 +332,7 @@ namespace magic_matrix
             //        array[i, j] = help_arr[i, j / 2];
             //    }
             //}
+            // CHECK -
             //Console.WriteLine(" =11===============================");
             //printArray(array, array.GetLength(0), array.GetLength(1));
             //Console.WriteLine(" =11===============================");
@@ -253,29 +364,49 @@ namespace magic_matrix
                 array[0, i] = array[0, i_back2];
                 array[0, i_back2] = j;
             }
+            
+            // CHECK
+            //Console.WriteLine(" ================================");
             //printArray(array, array.GetLength(0), array.GetLength(1));
             //Console.WriteLine(" ================================");
 
             //___________________________________________________B
             // two
-
             // stroka 
             // т.к это всегда будет четным то
-            int index_SEREDINA_two_last_stroki = array.GetLength(0) / 2;
 
+            int index_SEREDINA_two_last_stroki = array.GetLength(0) / 2 -1;
+            int index_SEREDINA_two_last_2_stroki = array.GetLength(0) / 2;
+
+            // SWAP 
             // 1 - это вторая строка (счет то с нуля)
             int reverse_j = array[1, index_SEREDINA_two_last_stroki];
-            array[1, index_SEREDINA_two_last_stroki] = array[array.GetLength(0)-1, index_SEREDINA_two_last_stroki];
-            array[array.GetLength(0) - 1, index_SEREDINA_two_last_stroki] = reverse_j;
+            array[1, index_SEREDINA_two_last_stroki] = array[1, index_SEREDINA_two_last_2_stroki];
+            array[1, index_SEREDINA_two_last_2_stroki] = reverse_j;
+
+            // last string
+            reverse_j = array[array.GetLength(0) - 1, index_SEREDINA_two_last_stroki];
+            array[array.GetLength(0) - 1, index_SEREDINA_two_last_stroki] = array[array.GetLength(0) - 1, index_SEREDINA_two_last_2_stroki];
+            array[array.GetLength(0) - 1, index_SEREDINA_two_last_2_stroki] = reverse_j;
+
+            // SWAP 
+            index_SEREDINA_two_last_stroki = array.GetLength(0) / 2 - 1;
+            index_SEREDINA_two_last_2_stroki = array.GetLength(0) / 2;
 
             // stolbec
             reverse_j = array[index_SEREDINA_two_last_stroki, 1];
-            array[index_SEREDINA_two_last_stroki, 1] = array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1];
-            array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1] = reverse_j;
+            array[index_SEREDINA_two_last_stroki, 1] = array[index_SEREDINA_two_last_2_stroki, 1];
+            array[index_SEREDINA_two_last_2_stroki, 1] = reverse_j;
 
-            //Console.WriteLine(" ================================");
+            // last stolbec
+            reverse_j = array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1];
+            array[index_SEREDINA_two_last_stroki, array.GetLength(0) - 1] = array[index_SEREDINA_two_last_2_stroki, array.GetLength(0) - 1];
+            array[index_SEREDINA_two_last_2_stroki, array.GetLength(0) - 1] = reverse_j;
+
+            // CHECK
+            //Console.WriteLine(" tut================================");
             //printArray(array, array.GetLength(0), array.GetLength(1));
-            //Console.WriteLine(" ================================");
+            //Console.WriteLine(" tut================================");
 
             // тут я слишком хотел переиграть код но все то что я писал оказалось в пустую но я все равно оставлю это сдесь D_D
             //int vtoroy_sredn_in_strok = array[1, 0]; // Вторая строка первый элемент
@@ -370,17 +501,25 @@ namespace magic_matrix
             array[sredn, 0] = array[sredn, array.GetLength(0) - 1];
             array[sredn, array.GetLength(0) - 1] = stroka_k_reverse;
 
-            //Console.WriteLine(" ================================");
+            // CHECK
+            //Console.WriteLine(" END================================");
             //printArray(array, array.GetLength(0), array.GetLength(1));
+            //Console.WriteLine(" END================================");
 
             return array;
         }
 
         static void Main(string[] args)
         {
-            int[,] array1 = new int[7, 7];
+            int[,] array1 = new int[7, 7]; // не четно
             int[,] array2 = new int[8, 8]; // четно и кратно 4
             int[,] array3 = new int[6, 6]; // четно но некратно 4
+
+            // output 1
+            Console.WriteLine("Your array **2**: ");
+            array1 = odd(array1.GetLength(0));
+            printArray(array1, array1.GetLength(0), array1.GetLength(1));
+            Console.WriteLine(" ============= " + isMagicSquare(array1) + " =============");
 
             // output 2
             Console.WriteLine("Your array **2**: ");
